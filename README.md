@@ -4,8 +4,6 @@
 
 各自のパソコン（ローカル環境）で安全に動作します。
 
-![スクリーンショット](https://github.com/securecat/Gemini-scraping-code-generator/blob/main/screenshot.png?raw=true)
-
 ## 準備
 
 1. [Google AI Studio](https://aistudio.google.com/)にアクセスし、「API Key」を取得してください（無料枠もあります）。
