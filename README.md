@@ -10,11 +10,17 @@
 
 1. [Google AI Studio](https://aistudio.google.com/)にアクセスし、「API Key」を取得してください（無料枠もあります）。
 2. お使いのパソコンにPythonがインストールされていることを確認してください。
-3. [gemini_scraping_code_generator.zip](https://github.com/securecat/Gemini-scraping-code-generator/raw/refs/heads/main/gemini_scraping_code_generator.zip)をダウンロードして展開してください。
 
 ## 使い方
 
-1. ローカルで `Gemini_scraping_code_generator.html` をブラウザで開きます。
+1. GitHub Pagesでホストされている本ツールを開きます：
+
+https://securecat.github.io/gemini-scraping-code-generator/
+
+> サーバーへデータが送信されることはありません。ファイルの処理はすべて、ブラウザとローカルストレージの間でローカルに行われます。
+
+あるいは、[gemini-scraping-code-generator.html](https://github.com/securecat/gemini-scraping-code-generator/raw/main/gemini-scraping-code-generator.html) をダウンロードし、ブラウザで直接開いてください。
+
 2. 取得したAPI Keyと、スクレイピングしたいサイトの条件を入力します。
 3. ボタン「Pythonコードを自動生成する」を押すと、数十秒でコードが生成されます。
 4. 生成されたコードを`.py`ファイルとして保存し、ターミナルやコマンドプロンプトで実行してください。
@@ -43,6 +49,8 @@ python3 -m pip install beautifulsoup4 requests
 
 ### 3. APIキーの管理
 
-入力したGemini APIキーは、お使いのブラウザ内（ローカル環境）にのみ安全に保存され、外部に送信されることはありません。ただし、この「gemini_scraping_code_generator.html」自体をそのままインターネット上のサーバー（GitHub Pagesなど）にアップロードしてWebサイトとして公開すると、通信データからAPIキーが漏洩する危険があります。必ずご自身のパソコン内にダウンロードした状態のまま（ローカル環境）で実行してください。
+入力したGemini APIキーは、Gemini API（Google）との通信にのみ使用され、それ以外の外部サーバーに送信されることはありません。「このブラウザにキーを記憶させる」にチェックを入れた場合は、ブラウザの`localStorage`にキーが保存されますが、これはお使いの端末・ブラウザ内に閉じた情報であり、他の利用者と共有されることはありません（この点は、本ツールをローカルで実行してもGitHub Pages経由で開いても変わりません）。
+
+なお、共有パソコンや不特定多数が使う端末でこのツールを利用する場合は、「このブラウザにキーを記憶させる」のチェックを外すか、利用後にブラウザの保存データを削除することをおすすめします。ご自身のAPIキーは、通常のAPIキーと同様、第三者に教えたりスクリーンショット等で公開したりしないようご注意ください。
 
 

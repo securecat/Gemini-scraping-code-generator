@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<!-- Gemini_scraping_code_generator v1.0.0 -->
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini スクレイピングコード・ジェネレーター</title>
+    <style>
+        /* === ライトテーマ（基本スタイル） === */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-size: 24px;
+            color: #1a73e8;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        input[type="text"], input[type="password"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #949494;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #fff;
+            color: #333;
+        }
+        input[type="checkbox"] {
+            accent-color: #1a73e8;
+            outline: 1px solid #949494;
+        }
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        .col {
+            flex: 1;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            font-size: 16px;
+            margin-top: 8px;
+            cursor: pointer;
+            color: #333;
+        }
+        #generate-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        #generate-btn:hover {
+            background-color: #1557b0;
+        }
+        #generate-btn:disabled {
+            background-color: #aaaff8;
+            cursor: not-allowed;
+        }
+        #output-container {
+            margin-top: 30px;
+            display: none;
+        }
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        #copy-btn {
+            background-color: #34a853;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 13px;
+            width: auto;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #copy-btn:hover {
+            background-color: #2b8a43;
+        }
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            margin: 0;
+        }
+        .status {
+            font-weight: bold;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #949494;
+            margin: 25px 0;
+        }
+
+        /* === ダークテーマ対応 === */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+            .container {
+                background: #1e1e1e;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            }
+            h1 {
+                color: #66a3ff;
+                border-bottom: 2px solid #4d94ff;
+            }
+            label {
+                color: #b0b0b0;
+            }
+            .checkbox-label {
+                color: #e0e0e0;
+            }
+            input[type="text"], input[type="password"], input[type="number"], textarea {
+                background-color: #2d2d2d;
+                color: #e0e0e0;
+                border: 1px solid #888888;
+            }
+            input[type="checkbox"] {
+                outline: 1px solid #888888;
+            }
+            .status {
+                color: #aaa;
+            }
+            hr {
+                border-top: 1px solid #6a6a6a;
+            }
+            .output-header h3 {
+                color: #e0e0e0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gemini スクレイピングコード生成ツール</h1>
+    
+    <div class="form-group">
+        <label for="api-key">Gemini API Key</label>
+        <input type="password" id="api-key" placeholder="AIzaSy... で始まるキーを入力">
+        <label class="checkbox-label">
+            <input type="checkbox" id="save-key"> このブラウザにキーを記憶させる
+        </label>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <label for="target-url">1. 最初にアクセスするURL（ベースURL）</label>
+        <input type="text" id="target-url" placeholder="https://www.example.com/folder/... など">
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="page-rule">2. ページ移動のルール（クエリ等）</label>
+                <input type="text" id="page-rule" placeholder="?page={n} や /page/{n} など">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="total-pages">3. 終了条件（最大ページ数）</label>
+                <input type="number" id="total-pages" value="100" min="1">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="extract-rule">4. 各ページから抽出したい内容（ルール、タグ、日本語でOK）</label>
+        <textarea id="extract-rule" placeholder="例: すべてのtr要素を探し、その中にある最初のaタグのURLとテキストを抽出する。HTMLの出力形式は <li><a href='URL' target='_blank'>テキスト</a></li> にして、最後に全体を <ul> で括る。"></textarea>
+    </div>
+
+    <button id="generate-btn" type="button">Pythonコードを自動生成する</button>
+    <div id="status-text" class="status"></div>
+
+    <div id="output-container">
+        <div class="output-header">
+            <h3 style="margin: 0; color: #333;">生成されたPythonコード (`scraper.py`)</h3>
+            <button id="copy-btn" type="button">コードをコピー</button>
+        </div>
+        <pre><code id="code-block"></code></pre>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (savedKey) {
+            document.getElementById('api-key').value = savedKey;
+            document.getElementById('save-key').checked = true;
+        }
+    });
+
+    document.getElementById('generate-btn').addEventListener('click', async () => {
+        const apiKey = document.getElementById('api-key').value.trim();
+        const saveKey = document.getElementById('save-key').checked;
+        const targetUrl = document.getElementById('target-url').value.trim();
+        const pageRule = document.getElementById('page-rule').value.trim();
+        const totalPages = document.getElementById('total-pages').value;
+        const extractRule = document.getElementById('extract-rule').value.trim();
+
+        const statusText = document.getElementById('status-text');
+        const outputContainer = document.getElementById('output-container');
+        const codeBlock = document.getElementById('code-block');
+
+        if (!apiKey) {
+            alert('APIキーを入力してください。');
+            return;
+        }
+        if (!targetUrl || !extractRule) {
+            alert('URLと抽出ルールは必須項目です。');
+            return;
+        }
+
+        if (saveKey) {
+            localStorage.setItem('gemini_api_key', apiKey);
+        } else {
+            localStorage.removeItem('gemini_api_key');
+        }
+
+        const prompt = `
+以下の条件を満たす、スクレイピング用のPythonスクリプトを作成してください。
+指示以外の余計な解説のテキストは省き、マークダウンのコードブロックの中にPythonコードのみを出力してください。
+
+【スクレイピング条件】
+- ターゲットURL(ベース): ${targetUrl}
+- ページ送りのルール: ${pageRule} (※1ページ目はそのまま、2ページ目以降にこれが付与されるようなロジックにしてください)
+- 最大ページ数(終了条件): ${totalPages}ページまでループ
+- 抽出ルールと成果物のHTML構造:
+${extractRule}
+
+【成果物（index.html）のスタイル・アクセシビリティ要件】
+最終的に出力されるHTMLファイル（index.html）は、以下のモダンなデザインとアクセシビリティ基準を必ず満たすCSSを含めてください。
+
+1. カラーモード対応
+- ブラウザのシステム設定に連動するダークテーマ（@media (prefers-color-scheme: dark)）に対応させること。
+- ライトテーマ表示・ダークテーマ表示の両方で、それぞれ必ずコントラスト比の確保を実施すること。（次項 2. に詳説）
+
+2. コントラスト比の確保（アクセシビリティ向上）
+- 【文字の視認性】すべてのテキストカラー（リンクテキスト、クリアボタン等を含む）は、それぞれ背景色に対して「4.5:1以上」のコントラスト比を確保すること。
+- 【UIパーツの視認性】ディバイダー（hr）、テキスト入力欄（input）の枠線、ボタンの枠線等、すべてのUIパーツの境界線は、背景色に対して「3:1以上」のコントラスト比を確保すること。
+
+3. フォントサイズ
+- どのパーツにおいても16px以上のフォントサイズとすること。
+
+4. レイアウト
+- 検索窓のコンテナ（クリアボタン含む）は、画面上部に固定（position: sticky; top: 0;）され、スクロールしても常に最上部に表示され、背景が透けないようにすること。
+
+【コード作成上の注意点】
+- サーバーに負荷をかけないよう、ループ内に time.sleep(1) などのウェイトを入れてください。
+- User-Agent ヘッダーを設定してブロック対策をしてください。
+- 最終的に、上記条件通りのHTMLファイルを出力するプログラムにしてください。
+`;
+
+        statusText.textContent = 'Geminiがコードを生成中...（数秒かかります）';
+        outputContainer.style.display = 'none';
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error?.message || 'API通信エラーが発生しました。');
+            }
+
+            let generatedText = data.candidates[0].content.parts[0].text;
+            generatedText = generatedText.replace(/^```python\s*/i, '').replace(/```\s*$/, '').trim();
+
+            codeBlock.textContent = generatedText;
+            statusText.textContent = '生成が完了しました！';
+            outputContainer.style.display = 'block';
+
+        } catch (error) {
+            console.error(error);
+            statusText.textContent = '';
+            alert('エラーが発生しました:\n' + error.message);
+        }
+    });
+
+    document.getElementById('copy-btn').addEventListener('click', () => {
+        const codeText = document.getElementById('code-block').textContent;
+        navigator.clipboard.writeText(codeText).then(() => {
+            const copyBtn = document.getElementById('copy-btn');
+            copyBtn.textContent = 'コピーしました！';
+            copyBtn.style.backgroundColor = '#1a73e8';
+            setTimeout(() => {
+                copyBtn.textContent = 'コードをコピー';
+                copyBtn.style.backgroundColor = '#34a853';
+            }, 2000);
+        });
+    });
+</script>
+
+</body>
+</html>
